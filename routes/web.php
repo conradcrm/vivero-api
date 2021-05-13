@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Models\Categoria;
+use App\Models\Planta;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,5 +15,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+   /* 
+    $plant = new Planta();
+$plant -> nombre = 'rosa azul';
+$plant -> descripcion = 'Una bella rosa azul cielo';
+$plant -> precio_venta = 159.90;
+$plant -> precio_compra = 120.00;
+$plant -> imagen = '\imagen';
+$plant -> existencia = 5;
+$plant -> id_categoria = 2;
+$plant->save();*/
+#$plant = Planta::find(2)->categoria;
+$plant = Categoria::find(2)->plantas;
+return $plant;
 });
