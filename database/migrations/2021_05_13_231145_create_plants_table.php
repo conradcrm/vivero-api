@@ -22,9 +22,11 @@ class CreatePlantsTable extends Migration
             $table->string('imagen');
             $table->integer('existencia');
             $table->unsignedBigInteger('id_categoria');
-            $table->integer('estado')->default(2);
+            $table->unsignedBigInteger('id_proveedor');
+            $table->string('estado')->default(1);
             #$table->timestamps();
             $table->foreign('id_categoria')->references('id_categoria')->on('categorias');
+            $table->foreign('id_proveedor')->references('id_proveedor')->on('proveedores');
         });
     }
 

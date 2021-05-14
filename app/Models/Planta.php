@@ -22,4 +22,10 @@ class Planta extends Model
         // $this hace referencia al objeto que tengamos en ese momento de Planta.
         return $this->belongsTo('App\Models\Categoria', 'id_categoria', 'id_categoria');
     }
+
+    public function proveedor(){
+        // 1 planta pertenece a una categoría
+        // $this hace referencia al objeto que tengamos en ese momento de Planta.
+        return $this->belongsTo('App\Models\Proveedor', 'id_proveedor', 'id_proveedor');
+    }
 }

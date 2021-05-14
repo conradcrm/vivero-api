@@ -10,13 +10,20 @@ class Proveedor extends Model
     use HasFactory;
     protected $table = 'proveedores';
     protected $primarykey = 'id_proveedor';
-    protected $fillabel = [
-        'id_proveedor','razon_social','estado','telefono','direccion', 'imagen' 
+    protected $fillable = [
+        'id_proveedor','razon_social','direccion','imagen','telefono', 'estado'
     ];
-    protected $hidden = ['created_at','updated_at'];
-    /*public function plantas(){
+
+    public function getKeyName(){
+        return "id_proveedor";
+    }
+
+    #protected $hidden = ['created_at','updated_at'];
+    public $timestamps = false;
+/*
+    public function plantas(){
         // 1 proveedor suministra muchas plantas
-        // $this hace referencia al objeto que tengamos en ese momento de Categoría.
-        return $this->hasMany('App\Planta');
+        // $this hace referencia al objeto que tengamos en ese momento de Proveedor`.
+        return $this->hasMany('App\Models\Planta', 'id_proveedor', 'id_proveedor');
     }*/
 }
