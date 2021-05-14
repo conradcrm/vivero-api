@@ -50,7 +50,7 @@ class CategoriaController extends Controller
 		// Si no existe ese categoria devolvemos un error.
 		if (!$categoria)
 		{
-			return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra registrado el proveedor'])],404);
+			return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra registrado el categoría'])],404);
 		}
 
 		return response()->json(['status'=>'ok','data'=>$categoria],200);
@@ -121,7 +121,7 @@ class CategoriaController extends Controller
 		}
         
         // Si el método es PUT y tendremos que actualizar todos los datos.
-		if (!$nombre || !$descripcion || !$imagen || !$estado)
+		if (!$nombre || !$descripcion || !$imagen )
 		{
 			// Se devuelve un array errors con los errores encontrados y cabecera HTTP 422 Unprocessable Entity – [Entidad improcesable] Utilizada para errores de validación.
 			return response()->json(['errors'=>array(['code'=>422,'message'=>'Faltan valores para completar el proceso.'])],422);

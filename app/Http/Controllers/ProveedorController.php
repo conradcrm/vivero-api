@@ -134,12 +134,12 @@ class ProveedorController extends Controller
 			{
 				// Se devuelve un array errors con los errores encontrados y cabecera HTTP 304 Not Modified – [No Modificada] Usado cuando el cacheo de encabezados HTTP está activo
 				// Este código 304 no devuelve ningún body, así que si quisiéramos que se mostrara el mensaje usaríamos un código 200 en su lugar.
-				return response()->json(['errors'=>array(['code'=>304,'message'=>'No se ha modificado ningún dato de la categoría.'])],304);
+				return response()->json(['errors'=>array(['code'=>304,'message'=>'No se ha modificado ningún dato de la proveedor.'])],304);
 			}
 		}
         
         // Si el método es PUT y tendremos que actualizar todos los datos.
-		if (!$razon_social || !$direccion || !$imagen || !$telefono || !$estado)
+		if (!$razon_social || !$direccion || !$imagen || !$telefono)
 		{
 			// Se devuelve un array errors con los errores encontrados y cabecera HTTP 422 Unprocessable Entity – [Entidad improcesable] Utilizada para errores de validación.
 			return response()->json(['errors'=>array(['code'=>422,'message'=>'Faltan valores para completar el proceso.'])],422);

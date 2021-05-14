@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ProveedorController;
-
+use App\Http\Controllers\PlantaController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -38,3 +38,9 @@ Route::get('/provider/{id_proveedor}', [ProveedorController::class, 'show']); //
 Route::post('/create-provider', [ProveedorController::class, 'store']); //Registra un proveedor
 Route::patch('/update-provider/{id_proveedor}', [ProveedorController::class, 'update']); //Actualiza (solo lo necesario)
 Route::put('/update-provider/{id_proveedor}', [ProveedorController::class, 'update']); //Actualiza (todo)
+
+Route::get('/plants', [PlantaController::class, 'index']); //Todas las plantas
+Route::get('/plants/{id_planta}', [PlantaController::class, 'show']); //Una planta
+Route::post('/create-plants', [PlantaController::class, 'store']); //Registra una planta
+Route::patch('/update-plant/{id_planta}', [PlantaController::class, 'update']); //Actualiza (solo lo necesario)
+Route::put('/update-plant/{id_planta}', [PlantaController::class, 'update']); //Actualiza (todo)

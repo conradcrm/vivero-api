@@ -11,7 +11,7 @@ class Planta extends Model
     protected $table = 'plantas';
     protected $primaryKey = 'id_planta';
     protected $fillable = [
-        'id_planta', 'nombre', 'descripcion', 'precio_venta', 'precio_compra', 'imagen', 'existencia', 'estado'
+        'id_planta', 'nombre', 'descripcion', 'precio_venta', 'precio_compra', 'imagen', 'existencia', 'estado', 'id_categoria', 'id_proveedor'
     ];
     
     #protected $hidden = ['created_at','updated_at'];
