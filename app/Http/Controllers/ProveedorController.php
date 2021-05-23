@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Proveedor;
 use Response;
+use Exception;
 
 class ProveedorController extends Controller
 {
@@ -27,14 +28,17 @@ class ProveedorController extends Controller
      */
     public function store(Request $request)
     {
-        if(!$request->input('razon_social') || !$request->input('direccion') || !$request->input('imagen') || !$request->input('telefono')){
-            return response()->json(['errors'=> array(['code'=>402, 'message'=> 'Faltan datos necesarios para el proceso de alta']),402]);
+        if(!$request->input('nombre') || !$request->input('direccion') || !$request->input('correo') || !$request->input('imagen') || !$request->input('telefono')){
+            return response()->json(['status'=>'error','code'=>402, 'message'=> 'Faltan datos necesarios para el proceso de registro.'],402);
         }
 
-        $nuevoProveedor=Proveedor::create($request->all());
+        try{
+            $nuevoProveedor=Proveedor::create($request->all());
+        }catch(Exception $e){
+            return response()->json(['status'=>'error','code'=>409,'message'=>'Ya existe un proveedor con el mismo nombre.'],409);
+        }
 
-        $response = Response::make(json_encode(['data'=> $nuevoProveedor]), 201);
-
+        $response = Response::make(json_encode(['status'=>'success','code'=>201,'message'=> 'El proveedor ha sido agregado con éxito.','data'=> $nuevoProveedor]), 201);
         return $response;
     }
 
@@ -84,9 +88,10 @@ class ProveedorController extends Controller
         }
         
         // Listado de campos recibidos teóricamente.
-		$razon_social=$request->input('razon_social');
+		$nombre=$request->input('nombre');
 		$direccion=$request->input('direccion');
 		$imagen=$request->input('imagen');
+        $correo=$request->input('correo');
         $telefono=$request->input('telefono');
         $estado=$request->input('estado');
         // Necesitamos detectar si estamos recibiendo una petición PUT o PATCH.
@@ -96,9 +101,9 @@ class ProveedorController extends Controller
 			// Creamos una bandera para controlar si se ha modificado algún dato en el método PATCH.
 			$bandera = false;
 			// Actualización parcial de campos.
-			if ($razon_social)
+			if ($nombre)
 			{
-				$proveedor->razon_social = $razon_social;
+				$proveedor->nombre = $nombre;
 				$bandera=true;
 			}
 
@@ -124,6 +129,12 @@ class ProveedorController extends Controller
 				$bandera=true;
 			}
 
+            if ($correo)
+			{
+				$proveedor->correo = $correo;
+				$bandera=true;
+			}
+
 			if ($bandera)
 			{
 				// Almacenamos en la base de datos el registro.
@@ -139,16 +150,17 @@ class ProveedorController extends Controller
 		}
         
         // Si el método es PUT y tendremos que actualizar todos los datos.
-		if (!$razon_social || !$direccion || !$imagen || !$telefono)
+		if (!$nombre || !$direccion || !$correo || !$imagen || !$telefono)
 		{
 			// Se devuelve un array errors con los errores encontrados y cabecera HTTP 422 Unprocessable Entity – [Entidad improcesable] Utilizada para errores de validación.
 			return response()->json(['errors'=>array(['code'=>422,'message'=>'Faltan valores para completar el proceso.'])],422);
 		}
 
-        $proveedor->razon_social = $razon_social;
+        $proveedor->nombre = $nombre;
 		$proveedor->direccion = $direccion;
 		$proveedor->imagen = $imagen;
         $proveedor->estado = $estado;
+        $proveedor->correo = $correo;
         $proveedor->telefono = $telefono;
 		// Almacenamos en la base de datos el registro.
 		$proveedor->save();

@@ -31,6 +31,7 @@ Route::get('/categories', [CategoriaController::class, 'index']); //Todas las ca
 Route::get('/category/{id_categoria}', [CategoriaController::class, 'show']); //Una categoría
 Route::post('/create-category', [CategoriaController::class, 'store']); //Registra una categoría
 Route::patch('/update-category/{id_categoria}', [CategoriaController::class, 'update']); //Actualiza (solo lo necesario)
+Route::patch('/delete-category/{id_categoria}', [CategoriaController::class, 'delete']); //Actualiza el estado (desabilita)
 Route::put('/update-category/{id_categoria}', [CategoriaController::class, 'update']); //Actualiza (todo)
 
 Route::get('/providers', [ProveedorController::class, 'index']); //Todos los proveedores
@@ -40,7 +41,7 @@ Route::patch('/update-provider/{id_proveedor}', [ProveedorController::class, 'up
 Route::put('/update-provider/{id_proveedor}', [ProveedorController::class, 'update']); //Actualiza (todo)
 
 Route::get('/plants', [PlantaController::class, 'index']); //Todas las plantas
-Route::get('/plants/{id_planta}', [PlantaController::class, 'show']); //Una planta
-Route::post('/create-plants', [PlantaController::class, 'store']); //Registra una planta
+Route::get('/plant/{id_planta}', [PlantaController::class, 'show']); //Una planta
+Route::post('/create-plant', [PlantaController::class, 'store']); //Registra una planta
 Route::patch('/update-plant/{id_planta}', [PlantaController::class, 'update']); //Actualiza (solo lo necesario)
 Route::put('/update-plant/{id_planta}', [PlantaController::class, 'update']); //Actualiza (todo)

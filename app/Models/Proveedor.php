@@ -11,7 +11,7 @@ class Proveedor extends Model
     protected $table = 'proveedores';
     protected $primarykey = 'id_proveedor';
     protected $fillable = [
-        'id_proveedor','razon_social','direccion','imagen','telefono', 'estado'
+        'id_proveedor','nombre','direccion', 'correo','imagen','telefono', 'estado'
     ];
 
     public function getKeyName(){

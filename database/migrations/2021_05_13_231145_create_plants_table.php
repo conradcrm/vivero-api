@@ -20,7 +20,7 @@ class CreatePlantsTable extends Migration
             $table->double('precio_venta', 5, 2);
             $table->double('precio_compra', 5, 2);
             $table->string('imagen');
-            $table->integer('existencia');
+            $table->integer('cantidad');
             $table->unsignedBigInteger('id_categoria');
             $table->unsignedBigInteger('id_proveedor');
             $table->string('estado')->default(1);

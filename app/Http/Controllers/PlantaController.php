@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\models\Planta;
 use Response;
+use Exception;
 
 class PlantaController extends Controller
 {
@@ -26,14 +27,18 @@ class PlantaController extends Controller
      */
     public function store(Request $request)
     {
-        if(!$request->input('nombre') || !$request->input('descripcion') || !$request->input('precio_venta') || !$request->input('precio_compra')|| !$request->input('imagen') || !$request->input('existencia'))
+        if(!$request->input('nombre') || !$request->input('descripcion') || !$request->input('precio_venta') || !$request->input('precio_compra')|| !$request->input('imagen') || !$request->input('cantidad'))
         {
-            return response()->json(['errors'=> array(['code'=>422, 'message'=>'Faltan datos necesarios para el proceso de alta.'])],422);
+            return response()->json(['status'=>'error','code'=>402, 'message'=> 'Faltan datos necesarios para el proceso de registro.'],402);
         }
 
-        $nuevaPlanta=Planta::create($request->all());
-        $response= Response::make(json_encode(['data'=>$nuevaPlanta]),201);
+        try{
+            $nuevaPlanta=Planta::create($request->all());
+        }catch(Exception $e){
+            return response()->json(['status'=>'error','code'=>409,'message'=>'Ya existe una planta con el mismo nombre.'],409);
+        }
 
+        $response = Response::make(json_encode(['status'=>'success','code'=>201,'message'=> 'La planta ha sido agregada con éxito.','data'=> $nuevaPlanta]), 201);
         return $response;
     }
 
@@ -74,7 +79,7 @@ class PlantaController extends Controller
         $precio_venta=$request->input('precio_venta');
         $precio_compra=$request->input('precio_compra');
 		$imagen=$request->input('imagen');
-        $existencia=$request->input('existencia');
+        $cantidad=$request->input('cantidad');
         $estado=$request->input('estado');
         $id_proveedor=$request->input('id_proveedor');
         $id_categoria=$request->input('id_categoria');
@@ -115,9 +120,9 @@ class PlantaController extends Controller
 				$bandera=true;
 			}
 
-            if($existencia)
+            if($cantidad)
             {
-                $planta->existencia = $existencia;
+                $planta->cantidad = $cantidad;
                 $bandera=true;
             }
 
@@ -154,7 +159,7 @@ class PlantaController extends Controller
 		}
         
         // Si el método es PUT y tendremos que actualizar todos los datos.
-		if (!$nombre || !$descripcion || !$precio_compra || !$precio_venta || !$imagen || !$existencia)
+		if (!$nombre || !$descripcion || !$precio_compra || !$precio_venta || !$imagen || !$cantidad)
 		{
 			// Se devuelve un array errors con los errores encontrados y cabecera HTTP 422 Unprocessable Entity – [Entidad improcesable] Utilizada para errores de validación.
 			return response()->json(['errors'=>array(['code'=>422,'message'=>'Faltan valores para completar el proceso.'])],422);
@@ -165,7 +170,7 @@ class PlantaController extends Controller
         $planta->precio_venta = $precio_venta;
         $planta->precio_compra = $precio_compra;
 		$planta->imagen = $imagen;
-        $planta->existencia = $existencia;
+        $planta->cantidad = $cantidad;
         $planta->estado = $estado;
         $planta->id_proveedor = $id_proveedor;
         $planta->id_categoria = $id_categoria;

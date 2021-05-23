@@ -70,7 +70,7 @@ class CategoriaController extends Controller
         {
             return response()->json(['errors'=> array(['code'=>404, 'message'=> 'No se encuentra la categoria'])]);
         }
-        
+
         // Listado de campos recibidos teóricamente.
 		$nombre=$request->input('nombre');
 		$descripcion=$request->input('descripcion');
@@ -82,7 +82,7 @@ class CategoriaController extends Controller
 		{
 			// Creamos una bandera para controlar si se ha modificado algún dato en el método PATCH.
 			$bandera = false;
-			// Actualización parcial de campos.
+            // Actualización parcial de campos.
 			if ($nombre)
 			{
 				$categoria->nombre = $nombre;
@@ -110,13 +110,13 @@ class CategoriaController extends Controller
 			{
 				// Almacenamos en la base de datos el registro.
 				$categoria->save();
-				return response()->json(['status'=>'ok','data'=>$categoria], 200);
+				return response()->json(['status'=>'success','message'=>'La categoría se modificó con éxito.','data'=>$categoria], 200);
 			}
             else
 			{
 				// Se devuelve un array errors con los errores encontrados y cabecera HTTP 304 Not Modified – [No Modificada] Usado cuando el cacheo de encabezados HTTP está activo
 				// Este código 304 no devuelve ningún body, así que si quisiéramos que se mostrara el mensaje usaríamos un código 200 en su lugar.
-				return response()->json(['errors'=>array(['code'=>304,'message'=>'No se ha modificado ningún dato de la categoría.'])],304);
+				return response()->json(['code'=>304,'message'=>'No se ha modificado ningún dato de la categoría.'],304);
 			}
 		}
         
@@ -134,9 +134,38 @@ class CategoriaController extends Controller
 
 		// Almacenamos en la base de datos el registro.
 		$categoria->save();
-		return response()->json(['status'=>'ok','data'=>$categoria], 200);
+		return response()->json(['status'=>'success','message'=> 'La categoría se modificó con éxito.','data'=>$categoria], 200);
     }
 
+
+    /**
+     * delete the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id_categoria
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(Request $request, $id_categoria)
+    {
+        $categoria= Categoria::find($id_categoria);
+        if(!$categoria)
+        {
+            return response()->json(['status'=>'error', 'code'=>404, 'message'=> 'No se encuentra la categoria.'],404);
+        }
+
+        if($categoria->estado == 2)
+        {
+            $categoria->estado = 1;
+            $categoria->save();
+            return response()->json(['status'=>'success', 'code'=>200, 'message'=> 'La categoría fue dada de alta con éxito.'],200);
+        }
+        else{
+            $categoria->estado = 2;
+        $categoria->save();
+        return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'La categoría fue dada de baja con éxito.','data'=>$categoria]), 200);
+        }
+    }
+    
     /**
      * Remove the specified resource from storage.
      *
