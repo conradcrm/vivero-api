@@ -52,7 +52,7 @@ class PlantaController extends Controller
     {
         $planta = Planta::find($id_planta);
         if(!$planta){
-            return response()->json(['errors'=>array(['code'=>'404', 'message'=> 'No se encuentra registrada la planta'])],404);
+            return response()->json(['status'=>'error','code'=>'404', 'message'=> 'No se encuentra registrada la planta'],404);
         }
 
         return response()->json(['status'=>'ok','data'=>$planta],200);
@@ -70,7 +70,7 @@ class PlantaController extends Controller
         $planta= planta::find($id_planta);
         if(!$planta)
         {
-            return response()->json(['errors'=> array(['code'=>404, 'message'=> 'No se encuentra la planta'])]);
+            return response()->json(['status'=>'error','code'=>404, 'message'=> 'No se encuentra la planta.'],404);
         }
         
         // Listado de campos recibidos teóricamente.
@@ -81,7 +81,7 @@ class PlantaController extends Controller
 		$imagen=$request->input('imagen');
         $cantidad=$request->input('cantidad');
         $estado=$request->input('estado');
-        $id_proveedor=$request->input('id_proveedor');
+        $id_planta=$request->input('id_planta');
         $id_categoria=$request->input('id_categoria');
         // Necesitamos detectar si estamos recibiendo una petición PUT o PATCH.
 		// El método de la petición se sabe a través de $request->method();
@@ -126,9 +126,9 @@ class PlantaController extends Controller
                 $bandera=true;
             }
 
-            if($id_proveedor)
+            if($id_planta)
             {
-                $planta->id_proveedor = $id_proveedor;
+                $planta->id_planta = $id_planta;
                 $bandera=true;
             }
 
@@ -148,13 +148,13 @@ class PlantaController extends Controller
 			{
 				// Almacenamos en la base de datos el registro.
 				$planta->save();
-				return response()->json(['status'=>'ok','data'=>$planta], 200);
+				return response()->json(['status'=>'success','code'=>'200','message'=>'La planta ha sido modificada con éxito.','data'=>$planta], 200);
 			}
             else
 			{
 				// Se devuelve un array errors con los errores encontrados y cabecera HTTP 304 Not Modified – [No Modificada] Usado cuando el cacheo de encabezados HTTP está activo
 				// Este código 304 no devuelve ningún body, así que si quisiéramos que se mostrara el mensaje usaríamos un código 200 en su lugar.
-				return response()->json(['errors'=>array(['code'=>304,'message'=>'No se ha modificado ningún dato de la planta.'])],304);
+				return response()->json(['status'=>'error','code'=>304,'message'=>'No se ha modificado ningún dato de la planta.'],304);
 			}
 		}
         
@@ -162,7 +162,7 @@ class PlantaController extends Controller
 		if (!$nombre || !$descripcion || !$precio_compra || !$precio_venta || !$imagen || !$cantidad)
 		{
 			// Se devuelve un array errors con los errores encontrados y cabecera HTTP 422 Unprocessable Entity – [Entidad improcesable] Utilizada para errores de validación.
-			return response()->json(['errors'=>array(['code'=>422,'message'=>'Faltan valores para completar el proceso.'])],422);
+			return response()->json(['status'=>'error','code'=>422,'message'=>'Faltan valores para completar el proceso.'],422);
 		}
 
         $planta->nombre = $nombre;
@@ -172,12 +172,40 @@ class PlantaController extends Controller
 		$planta->imagen = $imagen;
         $planta->cantidad = $cantidad;
         $planta->estado = $estado;
-        $planta->id_proveedor = $id_proveedor;
+        $planta->id_planta = $id_planta;
         $planta->id_categoria = $id_categoria;
         
 		// Almacenamos en la base de datos el registro.
 		$planta->save();
-		return response()->json(['status'=>'ok','data'=>$planta], 200);
+		return response()->json(['status'=>'success','code'=>'200','message'=>'La planta ha sido cambiada con éxito.','data'=>$planta], 200);
+    }
+
+    /**
+     * delete the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id_planta
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(Request $request, $id_planta)
+    {
+        $planta= Planta::find($id_planta);
+        if(!$planta)
+        {
+            return response()->json(['status'=>'error', 'code'=>404, 'message'=> 'La planta no existe.'],404);
+        }
+
+        if($planta->estado == 2)
+        {
+            $planta->estado = 1;
+            $planta->save();
+            return response()->json(['status'=>'success', 'code'=>200, 'message'=> 'La planta fue dada de alta con éxito.'],200);
+        }
+        else{
+            $planta->estado = 2;
+            $planta->save();
+            return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'La planta fue dada de baja con éxito.','data'=>$planta]), 200);
+        }
     }
 
     /**
