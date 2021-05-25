@@ -38,6 +38,7 @@ Route::get('/providers', [ProveedorController::class, 'index']); //Todos los pro
 Route::get('/provider/{id_proveedor}', [ProveedorController::class, 'show']); //Un proveedor
 Route::post('/create-provider', [ProveedorController::class, 'store']); //Registra un proveedor
 Route::patch('/update-provider/{id_proveedor}', [ProveedorController::class, 'update']); //Actualiza (solo lo necesario)
+Route::patch('/delete-provider/{id_proveedor}', [ProveedorController::class, 'delete']); //Actualiza el estado (desabilita)
 Route::put('/update-provider/{id_proveedor}', [ProveedorController::class, 'update']); //Actualiza (todo)
 
 Route::get('/plants', [PlantaController::class, 'index']); //Todas las plantas
