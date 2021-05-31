@@ -67,7 +67,7 @@ class PlantaController extends Controller
      */
     public function update(Request $request, $id_planta)
     {
-        $planta= planta::find($id_planta);
+        $planta= Planta::find($id_planta);
         if(!$planta)
         {
             return response()->json(['status'=>'error','code'=>404, 'message'=> 'No se encuentra la planta.'],404);
@@ -180,13 +180,6 @@ class PlantaController extends Controller
 		return response()->json(['status'=>'success','code'=>'200','message'=>'La planta ha sido cambiada con éxito.','data'=>$planta], 200);
     }
 
-    /**
-     * delete the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id_planta
-     * @return \Illuminate\Http\Response
-     */
     public function delete(Request $request, $id_planta)
     {
         $planta= Planta::find($id_planta);
@@ -199,15 +192,14 @@ class PlantaController extends Controller
         {
             $planta->estado = 1;
             $planta->save();
-            return response()->json(['status'=>'success', 'code'=>200, 'message'=> 'La planta fue dada de alta con éxito.'],200);
+            return response()->json(['status'=>'success', 'code'=>200, 'message'=> 'La planta fue dado de alta con éxito.'],200);
         }
         else{
             $planta->estado = 2;
             $planta->save();
-            return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'La planta fue dada de baja con éxito.','data'=>$planta]), 200);
+            return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'La planta fue dado de baja con éxito.','data'=>$planta]), 200);
         }
     }
-
     /**
      * Remove the specified resource from storage.
      *

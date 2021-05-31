@@ -28,13 +28,16 @@ class CategoriaController extends Controller
     {
         if(!$request->input('nombre') || !$request->input('descripcion') || !$request->input('imagen'))
         {
-            return response()->json(['errors'=>array(['code'=>422,'message'=>'Faltan datos necesarios para el proceso de alta.'])],422);
+            return response()->json(['status'=>'error','code'=>402, 'message'=> 'Faltan datos necesarios para el proceso de registro.'],402);
         }
 
-        $nuevaCategoria=Categoria::create($request->all());
-        
-        $response = Response::make(json_encode(['data'=>$nuevaCategoria]), 201);
-		
+        try{
+            $nuevaCategoria=Categoria::create($request->all());
+        }catch(Exception $e){
+            return response()->json(['status'=>'error','code'=>409,'message'=>'Ya existe una categoría con el mismo nombre.'],409);
+        }
+
+        $response = Response::make(json_encode(['status'=>'success','code'=>201,'message'=> 'La categoría ha sido agregada con éxito.','data'=> $nuevaCategoria]), 201);
         return $response;
     }
 
@@ -145,7 +148,7 @@ class CategoriaController extends Controller
      * @param  int  $id_categoria
      * @return \Illuminate\Http\Response
      */
-    public function delete(Request $request, $id_categoria)
+    public function delete($id_categoria)
     {
         $categoria= Categoria::find($id_categoria);
         if(!$categoria)
@@ -157,7 +160,7 @@ class CategoriaController extends Controller
         {
             $categoria->estado = 1;
             $categoria->save();
-            return response()->json(['status'=>'success', 'code'=>200, 'message'=> 'La categoría fue dada de alta con éxito.'],200);
+            return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'La categoría fue dada de alta con éxito.','data'=>$categoria]), 200);
         }
         else{
             $categoria->estado = 2;
