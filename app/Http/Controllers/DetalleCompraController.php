@@ -13,7 +13,6 @@ use Response;
 use Exception;
 use DB;
 
-
 class DetalleCompraController extends Controller
 {
     /**
