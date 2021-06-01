@@ -44,18 +44,23 @@ class DetalleCompraController extends Controller
      */
     public function store(Request $request)
     {
-        if(!$request->input('id_proveedor') || !$request->input('id_planta') || !$request->input('cantidad'))
+        $listPlantas = $request->inputs;
+        $id_proveedor = $request->id_proveedor;
+        
+        if(!$id_proveedor || !$listPlantas)
         {
             return response()->json(['status'=>'error','code'=>402, 'message'=> 'Faltan datos necesarios para el proceso de registro.'],402);
         }
         
         try{
             DB::beginTransaction();
-            $nuevaCompra=Compra::create(array('id_proveedor' => $request->input('id_proveedor')));
-            $detalleCompra = DetalleCompra::create(array(
-                'id_planta' => $request->input('id_planta'),
-                'cantidad' => $request->input('cantidad'),
-                'folio_compra' => 2));
+            $nuevaCompra=Compra::create(array('id_proveedor' => $id_proveedor));
+            for ($i=0; $i < count($listPlantas) ; $i++) { 
+                $detalleCompra = DetalleCompra::create(array(
+                    'id_planta' => $listPlantas[$i]['id_planta'],
+                    'cantidad' => $listPlantas[$i]['cantidad'],
+                    'folio_compra' => $nuevaCompra['folio_compra']));
+            }
             DB::commit();
         }catch(Exception $e){
             DB::rollBack();
@@ -63,7 +68,7 @@ class DetalleCompraController extends Controller
         }
 
         $response = Response::make(json_encode(['status'=>'success','code'=>201,'message'=> 'El registro de compra se completó con éxito','data'=> $nuevaCompra]), 201);
-        return $response;      
+        return $response;    
     }
 
     /**
