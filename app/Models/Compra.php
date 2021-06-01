@@ -22,4 +22,10 @@ class Compra extends Model
         // $this hace referencia al objeto que tengamos en ese momento de Compra.
         return $this->belongsTo('App\Models\Proveedor', 'id_proveedor', 'id_proveedor');
     }
+    
+    public function detalleCompra(){
+        // 1 compra tiene multiples  registros de productos
+        // $this hace referencia al objeto que tengamos en ese momento de Compra.
+        return $this->hasMany('App\Models\DetalleCompra', 'folio_compra', 'folio_compra');
+    }
 }

@@ -5,22 +5,30 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Response;
+use Exception;
 
 class AuthController extends Controller
 {
     public function register(Request $request){
         $validateData = $request->validate([
+            'name' => 'required|string',
             'email' => 'required|string|email',
             'password' => 'required|string|min:6',
         ]);
-
-        $user = User::create([
-            'email' => $validateData['email'],
-            'password' => Hash::make($validateData['password']),
-        ]);
+        
+        try {
+            $user = User::create([
+                'name' => $validateData['name'],
+                'email' => $validateData['email'],
+                'password' => Hash::make($validateData['password']),
+            ]);
+        } catch (\Throwable $th) {
+            return "error al registrar";
+        }
 
         $token = $user->createToken('auth_token')->plainTextToken;
-
+        
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
@@ -32,7 +40,7 @@ class AuthController extends Controller
         
         if (!Auth::attempt($credentials)) {
             return response()->json([
-                'email' => 'Las credenciales son incorrectas',
+                'response' => 'Las credenciales son incorrectas',
             ], 401); 
         }
         
@@ -58,5 +66,4 @@ class AuthController extends Controller
     public function userinfo(Request $request){
         return $request->user();   
     }
-
 }

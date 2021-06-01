@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\models\Planta;
 use App\models\Compra;
+use App\models\Proveedor;
+use App\models\Categoria;
 use App\models\DetalleCompra;
 use App\Quotation;
 use Response;
 use Exception;
 use DB;
-
 
 
 class DetalleCompraController extends Controller
@@ -22,7 +23,18 @@ class DetalleCompraController extends Controller
      */
     public function index()
     {
-
+        $compra = Compra::all();
+        for ($i = 0; $i < count($compra); $i++) {
+            $id_proveedor = $compra[$i]->id_proveedor;
+            $compra[$i]['proveedor'] = Proveedor::find($id_proveedor);
+            $detalle = Compra::find($compra[$i]->folio_compra)->detalleCompra;
+            for ($j=0; $j < count($detalle) ; $j++) { 
+                $id_planta = $detalle[$j]->id_planta;
+                $detalle[$j]['planta'] = Planta::find($id_planta);
+            }
+            $compra[$i]['detalle'] = $detalle;
+        }
+        return response()->json(['status'=>'success', 'code'=>200,'message'=>'Registro de compras' ,'data'=> $compra],200);
     }
 
     /**
@@ -44,7 +56,7 @@ class DetalleCompraController extends Controller
             $detalleCompra = DetalleCompra::create(array(
                 'id_planta' => $request->input('id_planta'),
                 'cantidad' => $request->input('cantidad'),
-                'folio_compra' => $nuevaCompra['folio_compra']));
+                'folio_compra' => 2));
             DB::commit();
         }catch(Exception $e){
             DB::rollBack();

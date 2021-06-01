@@ -50,7 +50,7 @@ Route::patch('/update-plant/{id_planta}', [PlantaController::class, 'update']); 
 Route::patch('/status-plant/{id_planta}', [PlantaController::class, 'delete']); //Actualiza el estado (desabilita)
 Route::put('/update-plant/{id_planta}', [PlantaController::class, 'update']); //Actualiza (todo)
 
-Route::get('/shopping', [CompraController::class, 'index']); //Todas las compras
+Route::get('/shopping', [DetalleCompraController::class, 'index']); //Todas las compras
 // Route::get('/shopping/{folio_compra}', [ShoppingController::class, 'show']); //Una compra
  Route::post('/create-shopping', [DetalleCompraController::class, 'store']); //Registra una compra
 // Route::patch('/update-shopping/{folio_compra}', [ShoppingController::class, 'update']); //Actualiza (solo lo necesario)

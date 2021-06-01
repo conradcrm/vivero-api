@@ -20,4 +20,15 @@ class Proveedor extends Model
 
     #protected $hidden = ['created_at','updated_at'];
     public $timestamps = false;
+
+    public function plantas(){
+        // 1 proveedor suministra muchas plantas
+        // $this hace referencia al objeto que tengamos en ese momento de Proveedor`.
+        return $this->hasMany('App\Models\Planta', 'id_proveedor', 'id_proveedor');
+    }
+    public function compras(){
+        // 1 proveedor atiende  a una compra
+        // $this hace referencia al objeto que tengamos en ese momento de Compra.
+        return $this->hasMany('App\Models\Compra', 'id_proveedor', 'id_proveedor');
+    }
 }
