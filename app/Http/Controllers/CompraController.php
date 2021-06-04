@@ -58,9 +58,35 @@ class CompraController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $folio_compra)
     {
-        //
+        $compra= Compra::find($folio_compra);
+        if(!$compra)
+        {
+            return response()->json(['status'=>'error', 'code'=>404, 'message'=> 'No se encuentra el registro de la compra seleccionada.'],404);
+        }
+        if(!$request->status){
+            return response()->json(['status'=>'error', 'code'=>404, 'message'=> 'Faltan datos necesarios para completar el proceso'],404);
+        }
+        
+        $estado = $request->status;
+        if($estado == "Completado")
+        {
+            $compra->estado = 1;
+            $compra->save();
+            return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'La compra se ha completado con éxito.','data'=>$compra]), 200);
+        }
+        else if($estado == "Pendiente")
+        {
+            $compra->estado = 2;
+            $compra->save();
+            return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'Ahora el registro de compra se encuentra como pendiente.','data'=>$compra]), 200);
+        }
+        else{
+            $compra->estado = 3;
+            $compra->save();
+        return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'La compra se ha cancelando con éxito.','data'=>$compra]), 200);
+        }
     }
 
     /**

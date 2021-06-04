@@ -187,7 +187,7 @@ class ProveedorController extends Controller
         {
             $proveedor->estado = 1;
             $proveedor->save();
-            return response()->json(['status'=>'success', 'code'=>200, 'message'=> 'El proveedor fue dado de alta con éxito.'],200);
+            return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'El proveedor fue dado de alta con éxito.','data'=>$proveedor]), 200);
         }
         else{
             $proveedor->estado = 2;
@@ -205,6 +205,12 @@ class ProveedorController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $proveedor = Proveedor::find($id);
+            $proveedor->delete();
+            return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'El proveedor fue eliminado con éxito.','data'=>$proveedor]), 200);   
+        } catch (Exception $th) {
+            return Response::make(json_encode(['status'=>'error','code'=>422,'message'=>'Ocurrió un error al intentar eliminar al proveedor.', 'errord'=> $th]), 422);
+        } 
     }
 }

@@ -192,12 +192,12 @@ class PlantaController extends Controller
         {
             $planta->estado = 1;
             $planta->save();
-            return response()->json(['status'=>'success', 'code'=>200, 'message'=> 'La planta fue dado de alta con éxito.'],200);
+            return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'La planta fue dada de alta con éxito.','data'=>$planta]), 200);
         }
         else{
             $planta->estado = 2;
             $planta->save();
-            return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'La planta fue dado de baja con éxito.','data'=>$planta]), 200);
+            return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'La planta fue dada de baja con éxito.','data'=>$planta]), 200);
         }
     }
     /**
@@ -208,6 +208,12 @@ class PlantaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $planta = Planta::find($id);
+            $planta->delete();
+            return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'La planta fue eliminada con éxito.','data'=>$planta]), 200);   
+        } catch (Exception $th) {
+            return Response::make(json_encode(['status'=>'error','code'=>422,'message'=>'Ocurrió un error al intentar eliminar la planta.', 'errord'=> $th]), 422);
+        }   
     }
 }

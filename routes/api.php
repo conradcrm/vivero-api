@@ -35,6 +35,8 @@ Route::post('/create-category', [CategoriaController::class, 'store']); //Regist
 Route::patch('/update-category/{id_categoria}', [CategoriaController::class, 'update']); //Actualiza (solo lo necesario)
 Route::patch('/status-category/{id_categoria}', [CategoriaController::class, 'delete']); //Actualiza el estado (desabilita)
 Route::put('/update-category/{id_categoria}', [CategoriaController::class, 'update']); //Actualiza (todo)
+Route::delete('/delete-category/{id_categoria}', [CategoriaController::class, 'destroy']); //eliminar categoría
+
 
 Route::get('/providers', [ProveedorController::class, 'index']); //Todos los proveedores
 Route::get('/provider/{id_proveedor}', [ProveedorController::class, 'show']); //Un proveedor
@@ -42,6 +44,7 @@ Route::post('/create-provider', [ProveedorController::class, 'store']); //Regist
 Route::patch('/update-provider/{id_proveedor}', [ProveedorController::class, 'update']); //Actualiza (solo lo necesario)
 Route::patch('/status-provider/{id_proveedor}', [ProveedorController::class, 'delete']); //Actualiza el estado (desabilita)
 Route::put('/update-provider/{id_proveedor}', [ProveedorController::class, 'update']); //Actualiza (todo)
+Route::delete('/delete-provider/{id_proveedor}', [ProveedorController::class, 'destroy']); //Eliminar proveedor
 
 Route::get('/plants', [PlantaController::class, 'index']); //Todas las plantas
 Route::get('/plant/{id_planta}', [PlantaController::class, 'show']); //Una planta
@@ -49,6 +52,7 @@ Route::post('/create-plant', [PlantaController::class, 'store']); //Registra una
 Route::patch('/update-plant/{id_planta}', [PlantaController::class, 'update']); //Actualiza (solo lo necesario)
 Route::patch('/status-plant/{id_planta}', [PlantaController::class, 'delete']); //Actualiza el estado (desabilita)
 Route::put('/update-plant/{id_planta}', [PlantaController::class, 'update']); //Actualiza (todo)
+Route::delete('/delete-plant/{id_planta}', [PlantaController::class, 'destroy']); //Eliminar planta
 
 Route::get('/shopping', [DetalleCompraController::class, 'index']); //Todas las compras
 // Route::get('/shopping/{folio_compra}', [ShoppingController::class, 'show']); //Una compra
@@ -56,3 +60,6 @@ Route::get('/shopping', [DetalleCompraController::class, 'index']); //Todas las 
 // Route::patch('/update-shopping/{folio_compra}', [ShoppingController::class, 'update']); //Actualiza (solo lo necesario)
 // Route::patch('/status-shopping/{folio_compra}', [ShoppingController::class, 'delete']); //Actualiza el estado (desabilita)
 // Route::put('/update-shopping/{folio_compra}', [ShoppingController::class, 'update']); //Actualiza (todo)
+
+//Route::patch('/status-shopping/{folio_compra}', [CompraController::class, 'update']);
+Route::patch('/status-shopping/{folio_compra}', 'App\Http\Controllers\CompraController@update');

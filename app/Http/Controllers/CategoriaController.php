@@ -178,6 +178,12 @@ class CategoriaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $categoria = Categoria::find($id);
+            $categoria->delete();
+            return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'La categoría fue eliminada con éxito.','data'=>$categoria]), 200);   
+        } catch (Exception $th) {
+            return Response::make(json_encode(['status'=>'error','code'=>422,'message'=>'Ocurrió un error al intentar eliminar la categoría.', 'errord'=> $th]), 422);
+        }        
     }
 }
