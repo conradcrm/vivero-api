@@ -46,6 +46,7 @@ Route::patch('/status-provider/{id_proveedor}', [ProveedorController::class, 'de
 Route::put('/update-provider/{id_proveedor}', [ProveedorController::class, 'update']); //Actualiza (todo)
 Route::delete('/delete-provider/{id_proveedor}', [ProveedorController::class, 'destroy']); //Eliminar proveedor
 
+
 Route::get('/plants', [PlantaController::class, 'index']); //Todas las plantas
 Route::get('/plant/{id_planta}', [PlantaController::class, 'show']); //Una planta
 Route::post('/create-plant', [PlantaController::class, 'store']); //Registra una planta
