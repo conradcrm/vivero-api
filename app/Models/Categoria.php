@@ -14,7 +14,7 @@ class Categoria extends Model
         'id_categoria', 'nombre', 'descripcion', 'imagen', 'estado','delete'
     ];
     
-    #protected $hidden = ['created_at','updated_at'];
+    //protected $hidden = ['created_at','updated_at'];
     public $timestamps = false;
 
     public function plantas(){    

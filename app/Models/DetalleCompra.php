@@ -14,6 +14,7 @@ class DetalleCompra extends Model
         'id_detallecompra', 'id_planta', 'folio_compra', 'cantidad','delete'
     ];
     
+    protected $hidden = ['delete'];
     #protected $hidden = ['created_at','updated_at'];
     public $timestamps = false;
 

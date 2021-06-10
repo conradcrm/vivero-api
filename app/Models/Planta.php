@@ -16,7 +16,8 @@ class Planta extends Model
     
     #protected $hidden = ['created_at','updated_at'];
     public $timestamps = false;
-
+    protected $hidden = ['delete'];
+    
     public function categoria(){
         // 1 planta pertenece a una categoría
         // $this hace referencia al objeto que tengamos en ese momento de Planta.

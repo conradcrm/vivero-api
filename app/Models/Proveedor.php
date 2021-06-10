@@ -14,6 +14,8 @@ class Proveedor extends Model
         'id_proveedor','nombre','direccion', 'correo','imagen','telefono', 'estado','delete'
     ];
 
+    protected $hidden = ['delete'];
+    
     public function getKeyName(){
         return "id_proveedor";
     }

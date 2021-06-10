@@ -15,15 +15,15 @@ class CreatePlantsTable extends Migration
     {
         Schema::create('plantas', function (Blueprint $table) {
             $table->bigIncrements('id_planta');
-            $table->string('nombre')->unique();
+            $table->string('nombre');
             $table->longText('descripcion');
             $table->double('precio_venta', 5, 2);
             $table->double('precio_compra', 5, 2);
             $table->string('imagen');
-            $table->integer('cantidad');
+            $table->integer('cantidad')->default(0);
+            $table->integer('estado')->default(1);
             $table->unsignedBigInteger('id_categoria');
             $table->unsignedBigInteger('id_proveedor');
-            $table->integer('estado')->default(1);
             $table->integer('delete')->default(1);
             #$table->timestamps();
             $table->foreign('id_categoria')->references('id_categoria')->on('categorias');

@@ -16,9 +16,8 @@ class CategoriaController extends Controller
      */
     public function index()
     {
-        $categories = Categoria::all();
-        $categoriesActive=$categories->where('delete',1);
-        return response()->json(['status'=>'ok', 'message'=> 'Registro de categorías', 'data'=>$categoriesActive], 200);
+        $categories = Categoria::where('delete',1)->get();
+        return response()->json(['status'=>'ok', 'message'=> 'Registro de categorías', 'data'=>$categories], 200);
     }
 
     /**
@@ -33,15 +32,21 @@ class CategoriaController extends Controller
         {
             return response()->json(['status'=>'error','code'=>402, 'message'=> 'Faltan datos necesarios para el proceso de registro.'],402);
         }
-
-        try{
-            $nuevaCategoria=Categoria::create($request->all());
-        }catch(Exception $e){
+        $categoryDuplicate=Categoria::where('nombre', $request->input('nombre'))->orderBy('id_categoria', 'DESC')->first();
+        
+        if($categoryDuplicate==null || $categoryDuplicate!=null && $categoryDuplicate->delete==2){            
+            try{
+                $nuevaCategoria=Categoria::create($request->all());
+            }catch(Exception $e){
+                return response()->json(['status'=>'error','error'=>$e,'code'=>400,'message'=>'Ah ocurrido un error al intentar agregar la categoría', 'da'=>$categoryDuplicate],400);
+            }
+        }
+        else{
             return response()->json(['status'=>'error','code'=>409,'message'=>'Ya existe una categoría con el mismo nombre.'],409);
         }
-
-        $response = Response::make(json_encode(['status'=>'success','code'=>201,'message'=> 'La categoría ha sido agregada con éxito.','data'=> $nuevaCategoria]), 201);
-        return $response;
+        
+        return $response = Response::make(json_encode(['status'=>'success','code'=>201,'message'=> 'La categoría ha sido agregada con éxito.','data'=> $nuevaCategoria]), 201);
+        
     }
 
     /**
