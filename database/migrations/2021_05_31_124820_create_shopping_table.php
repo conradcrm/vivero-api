@@ -17,6 +17,7 @@ class CreateShoppingTable extends Migration
             $table->bigIncrements('folio_compra');
             $table->unsignedBigInteger('id_proveedor');
             $table->integer('estado')->default(2);
+            $table->integer('delete')->default(1);
             $table->timestamps();
             $table->foreign('id_proveedor')->references('id_proveedor')->on('proveedores');
         });

@@ -16,7 +16,9 @@ class CategoriaController extends Controller
      */
     public function index()
     {
-        return response()->json(['status'=>'ok','data'=>Categoria::all()], 200);
+        $categories = Categoria::all();
+        $categoriesActive=$categories->where('delete',1);
+        return response()->json(['status'=>'ok', 'message'=> 'Registro de categorías', 'data'=>$categoriesActive], 200);
     }
 
     /**
@@ -170,6 +172,34 @@ class CategoriaController extends Controller
         }
     }
     
+    
+    /**
+     * delete the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id_categoria
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteCategory($id_categoria)
+    {
+        $categoria= Categoria::find($id_categoria);
+        if(!$categoria)
+        {
+            return response()->json(['status'=>'error', 'code'=>404, 'message'=> 'No se encuentra la categoria.'],404);
+        }
+        $categoria->estado = 2;
+        $categoria->delete = 2;
+        $categoria->save();
+        return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'La categoría fue eliminada con éxito.','data'=>$categoria]), 200);
+        
+        // else{
+        //     $categoria->estado = 1;
+        // $categoria->save();
+        // return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'','data'=>$categoria]), 200);
+        // }
+    }
+
+
     /**
      * Remove the specified resource from storage.
      *

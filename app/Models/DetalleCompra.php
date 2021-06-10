@@ -11,7 +11,7 @@ class DetalleCompra extends Model
     protected $table = 'detalle_compra';
     protected $primaryKey = 'id_detallecompra';
     protected $fillable = [
-        'id_detallecompra', 'id_planta', 'folio_compra', 'cantidad'
+        'id_detallecompra', 'id_planta', 'folio_compra', 'cantidad','delete'
     ];
     
     #protected $hidden = ['created_at','updated_at'];

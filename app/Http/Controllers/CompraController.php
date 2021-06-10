@@ -3,9 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\models\Planta;
 use App\models\Compra;
+use App\models\Proveedor;
+use App\models\Categoria;
+use App\models\DetalleCompra;
+use App\Quotation;
 use Response;
 use Exception;
+use DB;
 
 class CompraController extends Controller
 {
@@ -16,7 +22,19 @@ class CompraController extends Controller
      */
     public function index()
     {
-        return response()->json(['status'=>'ok', 'data'=> Compra::all()]);
+        $compras = Compra::all();
+        $compra = $compras->where('delete',1);
+        for ($i = 0; $i < count($compra); $i++) {
+            $id_proveedor = $compra[$i]->id_proveedor;
+            $compra[$i]['proveedor'] = Proveedor::find($id_proveedor);
+            $detalle = Compra::find($compra[$i]->folio_compra)->detalleCompra;
+            for ($j=0; $j < count($detalle) ; $j++) { 
+                $id_planta = $detalle[$j]->id_planta;
+                $detalle[$j]['planta'] = Planta::find($id_planta);
+            }
+            $compra[$i]['detalle'] = $detalle;
+        }
+        return response()->json(['status'=>'success','message'=>'Registro de compras' ,'data'=> $compra],200);
     }
     /**
      * Store a newly created resource in storage.
@@ -89,6 +107,29 @@ class CompraController extends Controller
         }
     }
 
+
+     /**
+     * delete the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id_compra
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteCompra(Request $request, $id_compra)
+    {
+        $compra= Compra::find($id_compra);
+        if(!$compra)
+        {
+            return response()->json(['status'=>'error', 'code'=>404, 'message'=> 'El registro no existe.'],404);
+        }
+        
+        $compra->delete = 2;
+        $compra->estado = 2;
+        $compra->save();
+            return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'El registro fue eliminado con éxito.','data'=>$compra]), 200);
+    }
+
+
     /**
      * Remove the specified resource from storage.
      *
@@ -97,6 +138,12 @@ class CompraController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $compra = Compra::find($id);
+            $compra->delete();
+            return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'El registro fue eliminado con éxito.','data'=>$compra]), 200);   
+        } catch (Exception $th) {
+            return Response::make(json_encode(['status'=>'error','code'=>422,'message'=>'Ocurrió un error al intentar eliminar el registro.', 'errord'=> $th]), 422);
+        }   
     }
 }

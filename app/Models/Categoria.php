@@ -11,7 +11,7 @@ class Categoria extends Model
     protected $table='categorias';
     protected $primaryKey = 'id_categoria';
     protected $fillable = [
-        'id_categoria', 'nombre', 'descripcion', 'imagen', 'estado'
+        'id_categoria', 'nombre', 'descripcion', 'imagen', 'estado','delete'
     ];
     
     #protected $hidden = ['created_at','updated_at'];

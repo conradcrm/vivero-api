@@ -16,7 +16,9 @@ class ProveedorController extends Controller
      */
     public function index()
     {
-        return response()->json(['status'=>'ok', 'data'=>Proveedor::all()]);
+        $providers = Proveedor::all();
+        $providersFilter = $providers->where('delete',1);
+        return response()->json(['status'=>'ok', 'message'=> 'Registro de proveedores', 'data'=>$providersFilter],200);
     }
 
     
@@ -196,6 +198,27 @@ class ProveedorController extends Controller
         }
     }
     
+
+    /**
+     * delete the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id_proveedor
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteProvider(Request $request, $id_proveedor)
+    {
+        $proveedor= Proveedor::find($id_proveedor);
+        if(!$proveedor)
+        {
+            return response()->json(['status'=>'error', 'code'=>404, 'message'=> 'El proveedor no existe.'],404);
+        }
+        
+        $proveedor->delete = 2;
+        $proveedor->estado = 2;
+        $proveedor->save();
+            return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'El proveedor fue eliminado con éxito.','data'=>$proveedor]), 200);
+    }
 
     /**
      * Remove the specified resource from storage.

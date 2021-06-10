@@ -20,7 +20,8 @@ class CreateProvidersTable extends Migration
             $table->string('imagen');
             $table->string('correo');
             $table->string('telefono');
-            $table->string('estado')->default(1);
+            $table->integer('estado')->default(1);
+            $table->integer('delete')->default(1);
             #$table->timestamps();
         });
     }

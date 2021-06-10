@@ -16,7 +16,9 @@ class PlantaController extends Controller
      */
     public function index()
     {
-        return response()->json(['status'=>'ok', 'data'=> Planta::all()]);
+        $plants = Planta::all();
+        $plantasActive = $plants->where('delete',1);
+        return response()->json(['status'=>'ok', 'message'=> 'Registro de plantas', 'data'=> $plantasActive], 200);
     }
 
     /**
@@ -199,6 +201,20 @@ class PlantaController extends Controller
             $planta->save();
             return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'La planta fue dada de baja con éxito.','data'=>$planta]), 200);
         }
+    }
+
+    public function deletePlant(Request $request, $id_planta)
+    {
+        $planta= Planta::find($id_planta);
+        if(!$planta)
+        {
+            return response()->json(['status'=>'error', 'code'=>404, 'message'=> 'La planta no existe.'],404);
+        }
+
+        $planta->estado = 2;
+        $planta->delete = 2;
+        $planta->save();
+        return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'La planta fue dada eliminada con éxito.','data'=>$planta]), 200);
     }
     /**
      * Remove the specified resource from storage.

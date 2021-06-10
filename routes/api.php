@@ -37,6 +37,8 @@ Route::patch('/status-category/{id_categoria}', [CategoriaController::class, 'de
 Route::put('/update-category/{id_categoria}', [CategoriaController::class, 'update']); //Actualiza (todo)
 Route::delete('/delete-category/{id_categoria}', [CategoriaController::class, 'destroy']); //eliminar categoría
 
+Route::patch('/delete-category/{id_categoria}', [CategoriaController::class, 'deleteCategory']); //elimina el elemento guiño, guiño.
+
 
 Route::get('/providers', [ProveedorController::class, 'index']); //Todos los proveedores
 Route::get('/provider/{id_proveedor}', [ProveedorController::class, 'show']); //Un proveedor
@@ -45,6 +47,8 @@ Route::patch('/update-provider/{id_proveedor}', [ProveedorController::class, 'up
 Route::patch('/status-provider/{id_proveedor}', [ProveedorController::class, 'delete']); //Actualiza el estado (desabilita)
 Route::put('/update-provider/{id_proveedor}', [ProveedorController::class, 'update']); //Actualiza (todo)
 Route::delete('/delete-provider/{id_proveedor}', [ProveedorController::class, 'destroy']); //Eliminar proveedor
+
+Route::patch('/delete-provider/{id_proveedor}', [ProveedorController::class, 'deleteProvider']); //elimina el elemento guiño, guiño.
 
 
 Route::get('/plants', [PlantaController::class, 'index']); //Todas las plantas
@@ -55,11 +59,14 @@ Route::patch('/status-plant/{id_planta}', [PlantaController::class, 'delete']); 
 Route::put('/update-plant/{id_planta}', [PlantaController::class, 'update']); //Actualiza (todo)
 Route::delete('/delete-plant/{id_planta}', [PlantaController::class, 'destroy']); //Eliminar planta
 
+Route::patch('/delete-plant/{id_planta}', [PlantaController::class, 'deletePlant']); //elimina el elemento guiño, guiño.
+
+
 Route::get('/shopping', [DetalleCompraController::class, 'index']); //Todas las compras
 // Route::get('/shopping/{folio_compra}', [ShoppingController::class, 'show']); //Una compra
- Route::post('/create-shopping', [DetalleCompraController::class, 'store']); //Registra una compra
+Route::post('/create-shopping', [DetalleCompraController::class, 'store']); //Registra una compra
 // Route::patch('/update-shopping/{folio_compra}', [ShoppingController::class, 'update']); //Actualiza (solo lo necesario)
-// Route::patch('/status-shopping/{folio_compra}', [ShoppingController::class, 'delete']); //Actualiza el estado (desabilita)
+Route::patch('/delete-shopping/{folio_compra}', [CompraController::class, 'deleteCompra']); //Elimina el elemento guiño guiño
 // Route::put('/update-shopping/{folio_compra}', [ShoppingController::class, 'update']); //Actualiza (todo)
 
 //Route::patch('/status-shopping/{folio_compra}', [CompraController::class, 'update']);
