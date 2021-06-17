@@ -86,7 +86,7 @@ class DetalleCompraController extends Controller
         }
 
         $nuevaCompra['detalle'] = $detalle;
-
+        $nuevaCompra['estado'] = 2;
         $response = Response::make(json_encode(['status'=>'success','code'=>201,'message'=> 'El registro de compra se completó con éxito','data'=> $nuevaCompra]), 201);
         return $response;    
     }

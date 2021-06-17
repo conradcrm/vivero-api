@@ -28,7 +28,7 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        if(!$request->input('nombre') || !$request->input('descripcion') || !$request->input('imagen'))
+        if(!$request->input('nombre') || !$request->input('descripcion'))
         {
             return response()->json(['status'=>'error','code'=>402, 'message'=> 'Faltan datos necesarios para el proceso de registro.'],402);
         }
@@ -38,7 +38,7 @@ class CategoriaController extends Controller
             try{
                 $nuevaCategoria=Categoria::create($request->all());
             }catch(Exception $e){
-                return response()->json(['status'=>'error','error'=>$e,'code'=>400,'message'=>'Ah ocurrido un error al intentar agregar la categoría', 'da'=>$categoryDuplicate],400);
+                return response()->json(['status'=>'error','error'=>$e,'code'=>400,'message'=>'Ah ocurrido un error al intentar agregar la categoría'],400);
             }
         }
         else{
@@ -57,13 +57,14 @@ class CategoriaController extends Controller
      */
     public function show($id_categoria)
     {
+        if(!$id_categoria){
+            return response()->json(['status'=>'error','code'=>422, 'message'=>'Faltan valores para completar el proceso.'],422);
+        }
+        
         $categoria=Categoria::find($id_categoria);
-		// Si no existe ese categoria devolvemos un error.
-		if (!$categoria)
-		{
+		if (!$categoria){
 			return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra registrado el categoría'])],404);
 		}
-
 		return response()->json(['status'=>'ok','data'=>$categoria],200);
     }
 

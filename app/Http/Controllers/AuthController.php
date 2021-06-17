@@ -35,6 +35,64 @@ class AuthController extends Controller
         ]);
     }
 
+    public function update(Request $request){
+        $validateData = $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|string|email',
+            'password' => 'required|string|min:6',
+        ]);
+        //$user = User::where('email', $request['email'])->firstOrFail();
+        $user = Auth::user();
+        
+        if(!$name=$request->input('name') || $email=$request->input('email') || $password=$request->input('password')){
+            return response()->json(['status'=>'error','code'=>422, 'message'=>'Faltan valores para completar el proceso.'],422);
+        }
+
+        $name=$request->input('name');
+		$email=$request->input('email');
+		$password=$request->input('password');
+
+        if ($request->method() === 'PATCH')
+		{
+			// Creamos una bandera para controlar si se ha modificado algún dato en el método PATCH.
+			$bandera = false;
+            // Actualización parcial de campos.
+			if ($name)
+			{
+				$user->name = $validateData['name'];
+				$bandera=true;
+			}
+
+			if ($email)
+			{
+				$user->email= $validateData['email'];
+				$bandera=true;
+			}
+
+			if ($password)
+			{
+				$user->password= Hash::make($validateData['password']);
+				$bandera=true;
+			}
+            if ($bandera)
+			{
+				$user->save();
+				return response()->json(['status'=>'success','message'=>'Los datos fueron modificados con éxito.','data'=>$user], 200);
+			}
+            else
+			{
+				return response()->json(['code'=>304,'message'=>'Ocurrió un problema al actualizar los datos.'],304);
+			}
+		}
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+        
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+        ]);
+    }
+
     public function login(Request $request){
         $credentials = $request->only('email', 'password');
         
@@ -50,7 +108,8 @@ class AuthController extends Controller
 
         return response()->json([
             'access_token' => $token,
-            'token_type' => 'Bearer'
+            'token_type' => 'Bearer',
+            'user'=> $user
         ]);
     }
 

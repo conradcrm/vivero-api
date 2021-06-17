@@ -92,17 +92,20 @@ class CompraController extends Controller
         {
             $compra->estado = 1;
             $compra->save();
+            $compra["estado"]=1;
             return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'La compra se ha completado con éxito.','data'=>$compra]), 200);
         }
         else if($estado == "Pendiente")
         {
             $compra->estado = 2;
             $compra->save();
+            $compra["estado"]=2;
             return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'Ahora el registro de compra se encuentra como pendiente.','data'=>$compra]), 200);
         }
         else{
             $compra->estado = 3;
             $compra->save();
+            $compra["estado"]=3;
         return Response::make(json_encode(['status'=>'success','code'=>200,'message'=>'La compra se ha cancelando con éxito.','data'=>$compra]), 200);
         }
     }

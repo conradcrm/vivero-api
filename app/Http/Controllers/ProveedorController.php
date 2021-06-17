@@ -16,11 +16,9 @@ class ProveedorController extends Controller
      */
     public function index()
     {
-        $providers = Proveedor::all();
-        $providersFilter = $providers->where('delete',1);
-        return response()->json(['status'=>'ok', 'message'=> 'Registro de proveedores', 'data'=>$providersFilter],200);
+        $providers = Proveedor::where('delete',1)->get();
+        return response()->json(['status'=>'ok', 'message'=> 'Registro de proveedores', 'data'=>$providers],200);
     }
-
     
     /**
      * Store a newly created resource in storage.
@@ -30,13 +28,19 @@ class ProveedorController extends Controller
      */
     public function store(Request $request)
     {
-        if(!$request->input('nombre') || !$request->input('direccion') || !$request->input('correo') || !$request->input('imagen') || !$request->input('telefono')){
+        if(!$request->input('nombre') || !$request->input('direccion') || !$request->input('correo') || !$request->input('telefono')){
             return response()->json(['status'=>'error','code'=>402, 'message'=> 'Faltan datos necesarios para el proceso de registro.'],402);
         }
 
-        try{
-            $nuevoProveedor=Proveedor::create($request->all());
-        }catch(Exception $e){
+        $providerDuplicate=Proveedor::where('nombre', $request->input('nombre'))->orderBy('id_proveedor', 'DESC')->first();
+        if($providerDuplicate==null || $providerDuplicate!=null && $providerDuplicate->delete==2){            
+            try{
+                $nuevoProveedor=Proveedor::create($request->all());
+            }catch(Exception $e){
+                return response()->json(['status'=>'error','error'=>$e,'code'=>400,'message'=>'Ah ocurrido un error al intentar agregar el proveedor'],400);
+            }
+        }
+        else{
             return response()->json(['status'=>'error','code'=>409,'message'=>'Ya existe un proveedor con el mismo nombre.'],409);
         }
 
@@ -56,11 +60,10 @@ class ProveedorController extends Controller
             return response()->json(['status'=>'error','code'=>422, 'message'=>'Faltan valores para completar el proceso.'],422);
         }
         $proveedor=Proveedor::find($id_proveedor);
-        /*if(!$proveedor){
+        if(!$proveedor){
             return response()->json(['errors'=> array(['code'=>404, 'message'=>'No se encuentra registrado el proveedor'])],404);
         }
-        return response()->json(['status'=>'ok', 'data'=>$proveedor], 200);*/
-        return response()->json(['status'=>'success', 'message'=>'Proveedor encontrado.', 'data'=>$proveedor], 200);
+        return response()->json(['status'=>'ok','data'=>$proveedor],200);
     }
 
     /**

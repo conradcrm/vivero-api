@@ -16,9 +16,8 @@ class PlantaController extends Controller
      */
     public function index()
     {
-        $plants = Planta::all();
-        $plantasActive = $plants->where('delete',1);
-        return response()->json(['status'=>'ok', 'message'=> 'Registro de plantas', 'data'=> $plantasActive], 200);
+        $plantas = Planta::where('delete',1)->get();
+        return response()->json(['status'=>'ok', 'message'=> 'Registro de plantas', 'data'=> $plantas], 200);
     }
 
     /**
@@ -29,17 +28,22 @@ class PlantaController extends Controller
      */
     public function store(Request $request)
     {
-        if(!$request->input('nombre') || !$request->input('descripcion') || !$request->input('precio_venta') || !$request->input('precio_compra')|| !$request->input('imagen') || !$request->input('cantidad'))
+        if(!$request->input('nombre') || !$request->input('descripcion') || !$request->input('precio_venta') || !$request->input('precio_compra'))
         {
             return response()->json(['status'=>'error','code'=>402, 'message'=> 'Faltan datos necesarios para el proceso de registro.'],402);
         }
 
-        try{
-            $nuevaPlanta=Planta::create($request->all());
-        }catch(Exception $e){
+        $plantDuplicate=Planta::where('nombre', $request->input('nombre'))->orderBy('id_planta', 'DESC')->first();
+        if($plantDuplicate==null || $plantDuplicate!=null && $plantDuplicate->delete==2){            
+            try{
+                $nuevaPlanta=Planta::create($request->all());
+            }catch(Exception $e){
+                return response()->json(['status'=>'error','code'=>400,'message'=>'Ha ocurrido un error al intentar agregar la planta', 'e'=>$e],400);
+            }
+        }
+        else{
             return response()->json(['status'=>'error','code'=>409,'message'=>'Ya existe una planta con el mismo nombre.'],409);
         }
-
         $response = Response::make(json_encode(['status'=>'success','code'=>201,'message'=> 'La planta ha sido agregada con éxito.','data'=> $nuevaPlanta]), 201);
         return $response;
     }

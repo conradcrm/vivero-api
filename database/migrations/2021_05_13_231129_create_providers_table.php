@@ -17,7 +17,7 @@ class CreateProvidersTable extends Migration
             $table->bigIncrements('id_proveedor');
             $table->string('nombre');
             $table->string('direccion');
-            $table->string('imagen');
+            $table->string('imagen')->nullable();
             $table->string('correo');
             $table->string('telefono');
             $table->integer('estado')->default(1);

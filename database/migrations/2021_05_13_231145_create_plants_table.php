@@ -17,9 +17,9 @@ class CreatePlantsTable extends Migration
             $table->bigIncrements('id_planta');
             $table->string('nombre');
             $table->longText('descripcion');
-            $table->double('precio_venta', 5, 2);
-            $table->double('precio_compra', 5, 2);
-            $table->string('imagen');
+            $table->double('precio_venta', 15, 2);
+            $table->double('precio_compra', 15, 2);
+            $table->string('imagen')->nullable();
             $table->integer('cantidad')->default(0);
             $table->integer('estado')->default(1);
             $table->unsignedBigInteger('id_categoria');
