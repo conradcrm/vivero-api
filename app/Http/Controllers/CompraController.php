@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\models\Planta;
-use App\models\Compra;
-use App\models\Proveedor;
-use App\models\Categoria;
-use App\models\DetalleCompra;
+use App\Models\Planta;
+use App\Models\Compra;
+use App\Models\Proveedor;
+use App\Models\Categoria;
+use App\Models\DetalleCompra;
 use App\Quotation;
 use Response;
 use Exception;
