@@ -16,13 +16,17 @@ use App\Http\Controllers\DetalleCompraController;
 | Here is where you can register API routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
-|
+|APP_KEY=base64:Sr8Dd02J5RYM7/H/gXWsYSCBNzq8tr33AcCOfbvMP5w=
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+Route::get('/', function () {
+    return 'Bienvenido';
+});
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);

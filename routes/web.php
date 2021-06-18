@@ -14,18 +14,7 @@ use App\Models\Planta;
 |
 */
 
+
 Route::get('/', function () {
-    /* 
-    $plant = new Planta();
-$plant -> nombre = 'rosa azul';
-$plant -> descripcion = 'Una bella rosa azul cielo';
-$plant -> precio_venta = 159.90;
-$plant -> precio_compra = 120.00;
-$plant -> imagen = '\imagen';
-$plant -> cantidad = 5;
-$plant -> id_categoria = 2;
-$plant->save();*/
-#$plant = Planta::find(2)->categoria;
-#$plant = Categoria::find(2)->plantas;
-#return $plant;
+    return view('welcome');
 });
