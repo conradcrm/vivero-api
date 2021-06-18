@@ -24,9 +24,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/', function () {
-    return 'Bienvenido';
-});
+Route::get('/', function () { return 'Bienvenido'; });
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -54,7 +52,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::patch('/status-category/{id_categoria}', [CategoriaController::class, 'delete']); //Actualiza el estado (desabilita)
     Route::put('/update-category/{id_categoria}', [CategoriaController::class, 'update']); //Actualiza (todo)
     Route::delete('/delete-category/{id_categoria}', [CategoriaController::class, 'destroy']); //eliminar categoría
-
     Route::patch('/delete-category/{id_categoria}', [CategoriaController::class, 'deleteCategory']); //elimina el elemento guiño, guiño.
 
 
