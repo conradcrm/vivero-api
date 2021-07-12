@@ -8,6 +8,7 @@ use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\PlantaController;
 use App\Http\Controllers\CompraController;
 use App\Http\Controllers\DetalleCompraController;
+use App\Http\Controllers\StatisticsController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,7 +24,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
 Route::get('/', function () { return 'Bienvenido'; });
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -37,11 +37,15 @@ Route::post('/logout', [AuthController::class, 'logout']); //no disponible no au
     Route::get('/provider/{id_proveedor}', [ProveedorController::class, 'show']); //Un proveedor
 
     Route::get('/plants', [PlantaController::class, 'index']); //Todas las plantas
+    Route::get('/plants-paginate/{page_size}', [PlantaController::class, 'indexPaginate']); //Las primeras N plantas
+
     Route::get('/plant/{id_planta}', [PlantaController::class, 'show']); //Una planta
 
     Route::get('/shopping', [DetalleCompraController::class, 'index']); //Todas las compras
+    Route::get('/shopping-paginate/{page_size}', [DetalleCompraController::class, 'indexPaginate']); //Las primeras N plantas
 
-
+    Route::get('/statistics', [StatisticsController::class, 'statistics']); //statistics
+    
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('/userinfo', [AuthController::class, 'userinfo']); //no disponible no autenticados

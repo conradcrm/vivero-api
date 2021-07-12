@@ -38,6 +38,27 @@ class DetalleCompraController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexPaginate(Request $request)
+    {   
+        $page_size = $request->page_size;
+        $compra = Compra::where('delete',1)->paginate($page_size);
+        for ($i = 0; $i < count($compra); $i++) {
+            $id_proveedor = $compra[$i]->id_proveedor;
+            $compra[$i]['proveedor'] = Proveedor::find($id_proveedor);
+            $detalle = Compra::find($compra[$i]->folio_compra)->detalleCompra;
+            for ($j=0; $j < count($detalle) ; $j++) { 
+                $id_planta = $detalle[$j]->id_planta;
+                $detalle[$j]['planta'] = Planta::find($id_planta);
+            }
+            $compra[$i]['detalle'] = $detalle;
+        }
+        return response()->json(['status'=>'success','message'=>'Registro de compras' ,'data'=> $compra],200);   
+    }
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

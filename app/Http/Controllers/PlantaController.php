@@ -21,6 +21,18 @@ class PlantaController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexPaginate(Request $request)
+    {
+        $page_size = $request->page_size;
+        $plantas = Planta::where('delete',1)->paginate($page_size);
+        return response()->json(['status'=>'ok', 'message'=> 'Registro de plantas', 'data'=> $plantas], 200);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -89,6 +101,7 @@ class PlantaController extends Controller
         $estado=$request->input('estado');
         $id_planta=$request->input('id_planta');
         $id_categoria=$request->input('id_categoria');
+        $id_proveedor=$request->input('id_proveedor');
         // Necesitamos detectar si estamos recibiendo una petición PUT o PATCH.
 		// El método de la petición se sabe a través de $request->method();
 		if ($request->method() === 'PATCH')
@@ -141,6 +154,12 @@ class PlantaController extends Controller
             if($id_categoria)
             {
                 $planta->id_categoria = $id_categoria;
+                $bandera=true;
+            }
+            
+            if($id_proveedor)
+            {
+                $planta->id_proveedor = $id_proveedor;
                 $bandera=true;
             }
 
